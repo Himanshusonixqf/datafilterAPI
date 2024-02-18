@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    .constain{
+        display:flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+
+</style>
+<body>
+    
+
+<input type="text" id="inputVal">
+
+<div class="display" id =display>
+</div>
+
+
+<script>
+    var input=document.getElementById("inputVal");
+    var display=document.getElementById("display");
+
+
+    const getData = async()=>{
+      var resp= await fetch("https://dummyjson.com/products");
+      var data= await resp.json();
+      return data;
+    }
+
+
+    const displayData= async()=>{
+       var query=input.value;
+      var   payload= await getData();
+    
+      console.log(typeof payload);
+   var datadis=  await payload.products.filter((eData)=>{if(query===""){return eData}
+   else if(eData.title.toLowerCase().includes(query.toLowerCase()) )return eData}).map((object)=>{
+    // console.log(object,"objjjj");
+      const {title,id}=object;
+
+
+    //   console.log(title,"title");
+
+      return `
+      <div class="constain">
+        <p> ${id}</p>
+          <p>${title}</p>
+           
+        <div/>`
+      }).join("");
+
+      display.innerHTML=datadis;
+
+    }
+
+displayData();
+
+input.addEventListener("keyup",()=>{
+    displayData();
+})
+</script>
+</body>
+</html>
